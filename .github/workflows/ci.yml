@@ -1,25 +1,42 @@
-name: CI Pipeline
+# name: CI Pipeline
+
+# on:
+#   pull_request:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   build-and-test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 18
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run tests
+#         run: npm test
+
+
+name: CI
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - develop
+      - feature/**
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - uses: actions/checkout@v4
+      - run: echo "Running CI"
+      - run: exit 1
