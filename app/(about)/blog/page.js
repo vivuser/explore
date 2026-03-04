@@ -1,8 +1,10 @@
 import React from 'react'
 
 const Blog = () => {
-  return (
+  return (<>
     <div>Blog</div>
+    <p>new</p>
+    </>
   )
 }
 
