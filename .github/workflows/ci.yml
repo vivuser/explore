@@ -3,13 +3,68 @@ name: CI
 on:
   push:
     branches:
+      - main
       - develop
-      - feature/**
+      - 'feature/**'
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      # - run: echo "Running CI"
-      - run: exit 1                         
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node (if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run tests
+        run: npm test  # Replace with your actual test command
+        
+      # For demo: intentional failure
+      - name: Demo failure
+        run: exit 1
+```
+
+### 3. Create PR with Correct Branch
+
+1. **Create task:** HAM-1 (already exists)
+2. **Create branch:** `feature/HAM-1-checkout-refactor`
+3. **Push code**
+4. **Open PR**
+5. **CI will run** and fail (because of `exit 1`)
+6. **Your system will block task HAM-1** automatically
+
+---
+
+## Expected Flow After Fixes
+```
+1. Create branch: feature/HAM-1-checkout-refactor
+   ↓
+2. Push code
+   ↓
+3. Open PR #76
+   ↓
+4. CI triggers (because of pull_request event)
+   ↓
+5. CI fails (exit 1)
+   ↓
+6. GitHub sends webhook
+   ↓
+7. Your system:
+   ✅ Extracts "HAM-1" from branch
+   ✅ Finds task with projectSeq=1 in HAM project
+   ✅ Links task to PR
+   ✅ Receives CI failure event
+   ✅ Creates blocker on HAM-1
+   ✅ Task status → "blocked"
