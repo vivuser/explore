@@ -5,14 +5,23 @@ on:
     branches:
       - develop
       - feature/**
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # - run: echo "Running CI"
-      - run: exit 1                         
-     
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Simulate CI Failure
+        run: |
+          echo "Running CI pipeline..."
+          echo "Simulating failure to test branch protection"
+          exit 1      
+
+          
      
